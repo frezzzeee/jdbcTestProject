@@ -19,7 +19,7 @@ public class Request {
 
     // Фукнция сброса таблицы
     public void dropTable() throws SQLException {
-        String dropTable = "DROP TABLE dexautomation.Mystudents;";
+        String dropTable = "DROP TABLE dexautomation.Students;";
         Statement statement = connection.createStatement();
         statement.executeUpdate(dropTable);
         statement.close();
@@ -27,7 +27,7 @@ public class Request {
 
     // Создание таблицы
     public void createTableQuery() throws SQLException {
-        String createTable = "  CREATE TABLE dexautomation.Mystudents (" +
+        String createTable = "  CREATE TABLE dexautomation.Students (" +
                             "  id INT NOT NULL AUTO_INCREMENT," +
                             "  firstname VARCHAR(45) NULL," +
                             "  lastname VARCHAR(45) NULL," +
@@ -38,36 +38,50 @@ public class Request {
         statement.executeUpdate(createTable);
         statement.close();
     }
+    private String name = "Clon";
+    private String lastname = "213";
+    private String age = "1221";
+    private String phone = "23123123";
+    public String student = name + lastname + age + phone;
 
-    // Вставка записей в таблицу
-    public void insertQuery () throws SQLException {
+    // Проверка на наличие записи, запись и вывод добавленного студента
+    public String insertQuery () throws SQLException {
+        String  insertStudent = "INSERT INTO dexautomation.Students (firstname, lastname, age, phone) VALUES (\'"+ name +"\' ,\'"+ lastname +"\' ,\'"+ age +"\' ,\'"+ phone +"\');";
+        String sqlQuery = "select * from Students";
+        String man = "";
 
         Statement statement = connection.createStatement();
-
-        List<String> studentsList = new ArrayList<String>();
-        studentsList.add("INSERT INTO dexautomation.Mystudents (firstname, lastname, age, phone) VALUES ('Ivan', 'Ivanov', '32', '892323');");
-        studentsList.add("INSERT INTO dexautomation.Mystudents (firstname, lastname, age, phone) VALUES ('Dima', 'Lukin', '27', '121233');");
-        studentsList.add("INSERT INTO dexautomation.Mystudents (firstname, lastname, age, phone) VALUES ('Olga', 'Otinova', '20', '831233');");
-
-        for (int i = 0; i < studentsList.size(); i++) {
-            statement.executeUpdate(studentsList.get(i));
+        Statement statement1 = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        while (resultSet.next()) {
+            String result = resultSet.getString(2)+resultSet.getString(3)+resultSet.getString(4)+resultSet.getString(5);
+            if (result.equals(student)) {
+                System.out.println("Студент уже добавлен");
+                man = result;
+                break;
+            }
+            else if(resultSet.isLast()) {
+                statement1.executeUpdate(insertStudent);
+                System.out.println("Студент добавлен");
+                Statement statement2 = connection.createStatement();
+                ResultSet resultSet1 = statement2.executeQuery(sqlQuery);
+                resultSet1.last();
+                man = resultSet1.getString(2)+resultSet1.getString(3)+resultSet1.getString(4)+resultSet1.getString(5);
+            }
         }
-        statement.close();
+        return man;
     }
 
     // Извлечение записей из таблицы
     public String executeQuery() throws SQLException {
 
-        String sqlQuery = "select * from Mystudents";
+        String sqlQuery = "select * from Students";
 
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sqlQuery);
 
-        String columnName2 = resultSet.getMetaData().getColumnName(2);
-        String columnName3 = resultSet.getMetaData().getColumnName(3);
-        String columnName4 = resultSet.getMetaData().getColumnName(4);
-        String columnName5 = resultSet.getMetaData().getColumnName(5);
-        String result = "Students column names: " + columnName2 + ", " + columnName3 + ", " + columnName4 + ", " + columnName5 + "\n";
+        String result = "";
+
         while (resultSet.next()) {
             String firstname = resultSet.getString(2);
             String lastname = resultSet.getString(3);
