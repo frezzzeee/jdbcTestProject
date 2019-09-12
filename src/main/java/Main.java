@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class Main {
 
+    //Тест на запись студента в БД
     @Test
     public void test() throws SQLException {
     Request table = new Request();

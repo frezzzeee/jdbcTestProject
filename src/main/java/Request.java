@@ -38,10 +38,12 @@ public class Request {
         statement.executeUpdate(createTable);
         statement.close();
     }
-    private String name = "Clon";
-    private String lastname = "213";
-    private String age = "1221";
-    private String phone = "23123123";
+
+    // Данные студента
+    private String name = "Федор";
+    private String lastname = "Петров";
+    private String age = "1";
+    private String phone = "89048763392";
     public String student = name + lastname + age + phone;
 
     // Проверка на наличие записи, запись и вывод добавленного студента
